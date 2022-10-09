@@ -16,6 +16,6 @@ export const ToolIcon = styled.li`
   padding: 0.5rem;
   &:hover {
     background-color: #999;
-    cursor: pointer;
+    cursor: move;
   }
 `;
