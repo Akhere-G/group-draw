@@ -1,8 +1,8 @@
 import React from "react";
 import { Container, Tools, ToolIcon, Circle, Triangle, Square } from "./styles";
-const Toolbar = () => {
+const Toolbar = ({ drop }) => {
   return (
-    <Container>
+    <Container ref={drop}>
       <h2>Toolbar</h2>
       <hr />
       <Tools>
