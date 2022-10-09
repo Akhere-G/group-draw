@@ -1,5 +1,8 @@
 import React from "react";
-import { Container, Tools, ToolIcon, Circle, Triangle, Square } from "./styles";
+import { Container, Tools, ToolIcon } from "./styles";
+import { ShapeTypes } from "../../types";
+import Shape from "../Shape";
+
 const Toolbar = ({ drop }) => {
   return (
     <Container ref={drop}>
@@ -7,13 +10,13 @@ const Toolbar = ({ drop }) => {
       <hr />
       <Tools>
         <ToolIcon>
-          <Circle />
+          <Shape type={ShapeTypes.CIRCLE} />
         </ToolIcon>
         <ToolIcon>
-          <Triangle />
+          <Shape type={ShapeTypes.TRIANGLE} />
         </ToolIcon>
         <ToolIcon>
-          <Square />
+          <Shape type={ShapeTypes.SQUARE} />
         </ToolIcon>
       </Tools>
     </Container>
