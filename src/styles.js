@@ -5,7 +5,6 @@ export const Wrapper = styled.div`
   max-width: 960px;
   padding: 0 1rem;
   display: flex;
-  gap: 1rem;
 `;
 
 export const Container = styled.div`
