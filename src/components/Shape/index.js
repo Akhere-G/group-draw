@@ -7,7 +7,7 @@ const Shape = ({ id, left, top, type }) => {
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: ItemTypes.SHAPE,
-      item: { id, left, top },
+      item: { id, left, top, type },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
@@ -15,14 +15,24 @@ const Shape = ({ id, left, top, type }) => {
     [id, left, top]
   );
 
+  let ShapeEl;
   switch (type) {
     case ShapeTypes.CIRCLE:
-      return <Circle ref={drag} />;
+      ShapeEl = Circle;
+      break;
     case ShapeTypes.SQUARE:
-      return <Square ref={drag} />;
-    default:
-      return <Triangle ref={drag} />;
+      ShapeEl = Square;
+      break;
+    case ShapeTypes.TRIANGLE:
+      ShapeEl = Triangle;
+      break;
   }
+
+  if (isDragging) {
+    return <ShapeEl ref={drag} top={top} left={left} />;
+  }
+
+  return <ShapeEl ref={drag} top={top} left={left} />;
 };
 
 export default Shape;

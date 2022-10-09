@@ -3,12 +3,13 @@ import { Toolbar, CanvasArea } from "./components";
 import useCanvas from "./hooks/useCanvas";
 
 function App() {
-  const { drop, shapes } = useCanvas();
+  const { drop, shapes, mouse, CanvasRef } = useCanvas();
+
   return (
     <Container>
       <Wrapper>
-        <Toolbar drop={drop} />
-        <CanvasArea />
+        <Toolbar />
+        <CanvasArea drop={drop} shapes={shapes} CanvasRef={CanvasRef} />
       </Wrapper>
     </Container>
   );

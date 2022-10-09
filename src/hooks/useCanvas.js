@@ -1,30 +1,33 @@
 import { useState, useEffect } from "react";
-import { v5 as uuid } from "uuid";
+import { v4 as uuid } from "uuid";
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "../types";
 
 const useCanvas = () => {
   const [shapes, setShapes] = useState([]);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
 
   const addShape = (left, top, type) => {
     setShapes((prev) => [...prev, { id: uuid(), left, top, type }]);
   };
 
+  useEffect(() => {
+    window.addEventListener("drop", (e) => {
+      setMouse({ x: e.pageX, y: e.pageY });
+    });
+  }, []);
+
   const [_, drop] = useDrop(
     () => ({
       accept: ItemTypes.SHAPE,
-      drop(item, monitor) {
-        const delta = monitor.getDifferenceFromInitialOffset();
-        const left = Math.round(item.left + delta.x);
-        const top = Math.round(item.top + delta.y);
-        addShape(item.id, left, top, item.type);
-        return undefined;
+      drop(item) {
+        addShape(mouse.x, mouse.y, item.type);
       },
     }),
-    [addShape]
+    [addShape, mouse]
   );
 
-  return { shapes, drop };
+  return { shapes, drop, mouse };
 };
 
 export default useCanvas;

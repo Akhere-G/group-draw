@@ -1,22 +1,23 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Container, Tools, ToolIcon } from "./styles";
 import { ShapeTypes } from "../../types";
 import Shape from "../Shape";
+import { v4 as uuid } from "uuid";
 
-const Toolbar = ({ drop }) => {
+const Toolbar = () => {
   return (
-    <Container ref={drop}>
+    <Container>
       <h2>Toolbar</h2>
       <hr />
       <Tools>
         <ToolIcon>
-          <Shape type={ShapeTypes.CIRCLE} />
+          <Shape id={uuid()} type={ShapeTypes.CIRCLE} />
         </ToolIcon>
         <ToolIcon>
-          <Shape type={ShapeTypes.TRIANGLE} />
+          <Shape id={uuid()} type={ShapeTypes.TRIANGLE} />
         </ToolIcon>
         <ToolIcon>
-          <Shape type={ShapeTypes.SQUARE} />
+          <Shape id={uuid()} type={ShapeTypes.SQUARE} />
         </ToolIcon>
       </Tools>
     </Container>
