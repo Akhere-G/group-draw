@@ -1,16 +1,13 @@
 import React from "react";
 import { ItemTypes, ShapeTypes } from "../../types";
 import { Circle, Triangle, Square } from "./styles";
-import { useDrop, useDrag } from "react-dnd";
+import { useDrag } from "react-dnd";
 
-const Shape = ({ id, left, top, type }) => {
-  const [{ isDragging }, drag] = useDrag(
+const Shape = ({ id, left, top, type, canEdit }) => {
+  const [_, drag] = useDrag(
     () => ({
       type: ItemTypes.SHAPE,
-      item: { id, left, top, type },
-      collect: (monitor) => ({
-        isDragging: monitor.isDragging(),
-      }),
+      item: { id, left, top, type, canEdit },
     }),
     [id, left, top]
   );
@@ -26,10 +23,6 @@ const Shape = ({ id, left, top, type }) => {
     case ShapeTypes.TRIANGLE:
       ShapeEl = Triangle;
       break;
-  }
-
-  if (isDragging) {
-    return <ShapeEl ref={drag} top={top} left={left} />;
   }
 
   return <ShapeEl ref={drag} top={top} left={left} />;

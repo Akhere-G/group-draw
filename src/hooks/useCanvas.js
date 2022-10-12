@@ -11,12 +11,27 @@ const useCanvas = () => {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const canvasRef = useRef();
 
-  const addShapeLocally = useCallback((left, top, type) => {
-    setShapes((prev) => [...prev, { id: uuid(), left, top, type }]);
+  const addShapeLocally = useCallback((newShape) => {
+    setShapes((prev) => [...prev, newShape]);
   }, []);
 
-  const broadcastNewShape = useCallback(async (left, top, type) => {
-    await socket.emit("add_shape", { left, top, type });
+  const broadcastNewShape = useCallback(async (newShape) => {
+    await socket.emit("add_shape", newShape);
+  }, []);
+
+  const editShapeLocally = useCallback((newShape) => {
+    setShapes((prev) =>
+      prev.map((item) => {
+        if (item.id === newShape.id) {
+          return newShape;
+        }
+        return item;
+      })
+    );
+  }, []);
+
+  const broadcastEditedShape = useCallback(async (newShape) => {
+    await socket.emit("edit_shape", newShape);
   }, []);
 
   useEffect(() => {
@@ -26,8 +41,11 @@ const useCanvas = () => {
   }, []);
 
   useEffect(() => {
-    socket.on("receive_shape", ({ left, top, type }) => {
-      addShapeLocally(left, top, type);
+    socket.on("receive_shape", (newShape) => {
+      addShapeLocally(newShape);
+    });
+    socket.on("receive_shape_to_edit", (newShape) => {
+      editShapeLocally(newShape);
     });
   }, []);
 
@@ -46,16 +64,21 @@ const useCanvas = () => {
           y: absoluteDropPosition.y - CanvasPosition.y,
         };
 
-        addShapeLocally(
-          relativeDropPosition.x,
-          relativeDropPosition.y,
-          item.type
-        );
-        broadcastNewShape(
-          relativeDropPosition.x,
-          relativeDropPosition.y,
-          item.type
-        );
+        let newShape = {
+          id: item.id,
+          left: relativeDropPosition.x,
+          top: relativeDropPosition.y,
+          type: item.type,
+          canEdit: true,
+        };
+
+        if (item.canEdit) {
+          editShapeLocally(newShape);
+          broadcastEditedShape(newShape);
+        } else {
+          addShapeLocally(newShape);
+          broadcastNewShape(newShape);
+        }
       },
     }),
     [addShapeLocally, broadcastNewShape, mouse]
