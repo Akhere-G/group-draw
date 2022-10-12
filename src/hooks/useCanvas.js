@@ -34,13 +34,28 @@ const useCanvas = () => {
   const [_, drop] = useDrop(
     () => ({
       accept: ItemTypes.SHAPE,
-      drop(item) {
-        const initialCanvasPosition = canvasRef.current.getClientRects()[0];
+      drop(item, monitor) {
+        const CanvasPosition = canvasRef.current.getClientRects()[0];
 
-        const mouseX = mouse.x - initialCanvasPosition.x;
-        const mouseY = mouse.y - initialCanvasPosition.y;
-        addShapeLocally(mouseX, mouseY, item.type);
-        broadcastNewShape(mouseX, mouseY, item.type);
+        // drop position relative to viewport
+        const absoluteDropPosition = monitor.getSourceClientOffset();
+
+        // drop position relative to canvas
+        const relativeDropPosition = {
+          x: absoluteDropPosition.x - CanvasPosition.x,
+          y: absoluteDropPosition.y - CanvasPosition.y,
+        };
+
+        addShapeLocally(
+          relativeDropPosition.x,
+          relativeDropPosition.y,
+          item.type
+        );
+        broadcastNewShape(
+          relativeDropPosition.x,
+          relativeDropPosition.y,
+          item.type
+        );
       },
     }),
     [addShapeLocally, broadcastNewShape, mouse]
