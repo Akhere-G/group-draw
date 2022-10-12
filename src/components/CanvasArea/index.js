@@ -3,7 +3,6 @@ import Shape from "../Shape";
 import { Container } from "./styles";
 
 const CanvasArea = ({ drop, shapes, canvasRef }) => {
-  const [canvasPosition, setPosition] = useState({ x: 0, y: 0 });
   const [dimensions, setDimensions] = useState({ height: 0, width: 0 });
 
   useEffect(() => {
