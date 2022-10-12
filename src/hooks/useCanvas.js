@@ -3,12 +3,13 @@ import { v4 as uuid } from "uuid";
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "../types";
 
-const useCanvas = () => {
+const useCanvas = (socket) => {
   const [shapes, setShapes] = useState([]);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const canvasRef = useRef();
 
   const addShape = (left, top, type) => {
+    socket.emit("add_shape");
     setShapes((prev) => [...prev, { id: uuid(), left, top, type }]);
   };
 
